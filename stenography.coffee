@@ -1,5 +1,6 @@
 jimp = require 'jimp'
 async = require 'async'
+dct = require('dct');
 
 module.exports.suffixWatermarking = (colorFile, watermarkFile, watermarkedFile)->
 	async.parallel
