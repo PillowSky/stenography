@@ -1,0 +1,15 @@
+{
+	"name": "stenography",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node app.js"
+	},
+	"main": "app.js",
+	"dependencies": {
+		"express": "4.x",
+		"opencv": "3.2.x",
+		"jimp": "x",
+		"async": "1.5.x"
+	}
+}
