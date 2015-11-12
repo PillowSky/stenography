@@ -8,7 +8,6 @@
 	"main": "app.js",
 	"dependencies": {
 		"express": "4.x",
-		"opencv": "3.2.x",
 		"jimp": "x",
 		"async": "1.5.x"
 	}

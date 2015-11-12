@@ -1,78 +1,43 @@
-opencv = require 'opencv'
+jimp = require 'jimp'
 async = require 'async'
 
-module.exports.suffixWatermarking = (imageFile, watermarkFile, watermarkedFile)->
+module.exports.suffixWatermarking = (colorFile, watermarkFile, watermarkedFile)->
 	async.parallel
-		image: (callback)->
-			opencv.readImage(imageFile, callback)
+		color: (callback)->
+			jimp.read(colorFile, callback)
 		watermark: (callback)->
-			opencv.readImage(watermarkFile, callback)
+			jimp.read(watermarkFile, callback)
 	, (error, results)->
-			width = results.image.width()
-			height = results.image.height()
-			buffer = Buffer(width * height * 3)
+			width = results.color.bitmap.width
+			height = results.color.bitmap.height
+			color = results.color.bitmap.data
+			watermark = results.watermark.bitmap.data
+			length = color.length
+			watermarked = Buffer(length)
 
-			index = 0
-			for i in [0...width]
-				for j in [0...height]
-					image = results.image.pixel(i, j)
-					watermark = results.watermark.pixel(i, j)
-					watermark.
-					buffer[index++] = (image[0] & 252) | watermark[0] >> 6
-					buffer[index++] = (image[1] & 252) | watermark[1] >> 6
-					buffer[index++] = (image[2] & 252) | watermark[2] >> 6
+			for pixel in [0...length] by 4
+				for i in [pixel...pixel+4]
+					watermarked[i] = (color[i] & 252) | watermark[i] >> 6
 
-			console.log('OK', index)
-			watermarked = new opencv.Matrix(height, width, opencv.Constants.CV_8UC3);
-			watermarked.put(buffer)
-			watermarked.save(watermarkedFile);
-
-			'''
-			#for i in [0...results[.row]
-			#	for j in [0...results[0].col]
-			#console.log results[0].pixel(500, 500)
-			
-			
-			height = results.image.height()
-			width = results.image.width()
-			watermarked = new opencv.Matrix(height, width)
-
-			#for col in [0...width]
-			#	for row in [0...height]
-					
-			console.log Array.isArray(results.image.pixel(0, 0))
-			for key, value of results.image.pixel(0, 0)
-				console.log(key, value)
-
-			#typeary = new Uint8Array.from(results.image.pixel(0, 0))
-			#console.log(typeary)
-			ab = new ArrayBuffer(32);
-			i32 = new Uint8Array(ab, 4, 2);
-			i33 = new Uint8Array(32); 
-			#console.log(i32)
-			console.log Array.isArray(i32)
-			#for key, value of i33
-			#	console.log(key)
-			
-			'''
-
+			new jimp width, height, (error, watermarkedImage)->
+				watermarkedImage.bitmap.data = watermarked
+				watermarkedImage.opaque().write watermarkedFile, ->
+					console.log 'Done'
 
 module.exports.suffixDetection = (watermarkedFile, watermarkFile)->
-	opencv.readImage watermarkedFile, (error, watermarked)->
-		width = watermarked.width()
-		height = watermarked.height()
-		buffer = Buffer(width * height * 3)
+	jimp.read watermarkedFile, (error, watermarkedImage)->
+		width = watermarkedImage.bitmap.width
+		height = watermarkedImage.bitmap.height
+		watermarked = watermarkedImage.bitmap.data
+		length = watermarked.length
+		watermark = Buffer(length)
 
-		index = 0
-		for i in [0...width]
-			for j in [0...height]
-				image = watermarked.pixel(i, j)
-				buffer[index++] = (image[0] & 3) << 6
-				buffer[index++] = (image[1] & 3) << 6
-				buffer[index++] = (image[2] & 3) << 6
-				#console.log(image[2], image[2] & 15, (image[2] & 15) << 4)
+		for pixel in [0...length] by 4
+			for i in [pixel...pixel+4]
+				watermark[i] = (watermarked[i] & 3) << 6
 
-		console.log('OK', index)
-		watermark = new opencv.Matrix(height, width, opencv.Constants.CV_8UC3);
-		watermark.put(buffer)
-		watermark.save(watermarkFile);
+		new jimp width, height, (error, watermarkImage)->
+			watermarkImage.bitmap.data = watermark
+			watermarkImage.opaque().write watermarkFile, ->
+				console.log 'Done'
+
