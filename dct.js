@@ -1,13 +1,51 @@
+"use strict";
+
+var dctCosCache = {};
+var ictCosCache = {};
+
+function calcDctCos(N) {
+	if (dctCosCache[N]) {
+		return dctCosCache[N];
+	} else {
+		var cache = new Array(N * N);
+		var PI_N = Math.PI / N;
+		for (var k = 0; k < N; k++) {
+			var PI_N_K = PI_N * k;
+			for (var n = 0; n < N; n++) {
+				cache[k * N + n] = Math.cos(PI_N_K * (n + 0.5));
+			}
+		}
+		dctCosCache[N] = cache;
+		return cache;
+	}
+}
+
+function calcIctCos(N) {
+	if (ictCosCache[N]) {
+		return ictCosCache[N];
+	} else {
+		var cache = new Array(N * N);
+		var PI_N = Math.PI / N;
+		for (var k = 0; k < N; k++) {
+			var PI_N_K = PI_N * (k + 0.5);
+			for (var n = 1; n < N; n++) {
+				cache[k * N + n] = Math.cos(PI_N_K * n);
+			}
+		}
+		ictCosCache[N] = cache;
+		return cache;
+	}
+}
+
 function dct(signal) {
 	var N = signal.length;
-	var PI_N = Math.PI / N;
+	var cos = calcDctCos(N);
 	var coeff = new Array(N);
 
 	for (var k = 0; k < N; k++) {
 		var sum = 0;
-		var PI_N_K = PI_N * k;
 		for (var n = 0; n < N; n++) {
-			sum += signal[n] * Math.cos(PI_N_K * (n + 0.5));
+			sum += signal[n] * cos[k * N + n];
 		}
 		coeff[k] = sum;
 	}
@@ -17,15 +55,14 @@ function dct(signal) {
 
 function ict(signal) {
 	var N = signal.length;
-	var PI_N = Math.PI / N;
+	var cos = calcIctCos(N);
 	var signal_0_5 = 0.5 * signal[0];
 	var coeff = new Array(N);
 
 	for (var k = 0; k < N; k++) {
 		var sum = signal_0_5;
-		var PI_N_K = PI_N * (k + 0.5);
 		for (var n = 1; n < N; n++) {
-			sum += signal[n] * Math.cos(PI_N_K * n);
+			sum += signal[n] * cos[k * N + n];
 		}
 		coeff[k] = sum * 2 / N;
 	}
@@ -35,7 +72,6 @@ function ict(signal) {
 
 function xct2(signal, width, height, fn) {
 	var coeff = new Array(width * height * 4);
-	console.log(coeff.length);
 
 	for (var row = 0; row < height; row++) {
 		for (var color = 0; color < 4; color++) {
