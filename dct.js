@@ -7,7 +7,7 @@ function calcDctCos(N) {
 	if (dctCosCache[N]) {
 		return dctCosCache[N];
 	} else {
-		var cache = new Array(N * N);
+		var cache = new Float64Array(N * N);
 		var PI_N = Math.PI / N;
 		for (var k = 0; k < N; k++) {
 			var PI_N_K = PI_N * k;
@@ -24,7 +24,7 @@ function calcIctCos(N) {
 	if (ictCosCache[N]) {
 		return ictCosCache[N];
 	} else {
-		var cache = new Array(N * N);
+		var cache = new Float64Array(N * N);
 		var PI_N = Math.PI / N;
 		for (var k = 0; k < N; k++) {
 			var PI_N_K = PI_N * (k + 0.5);
@@ -40,7 +40,7 @@ function calcIctCos(N) {
 function dct(signal) {
 	var N = signal.length;
 	var cos = calcDctCos(N);
-	var coeff = new Array(N);
+	var coeff = new Float64Array(N);
 
 	for (var k = 0; k < N; k++) {
 		var sum = 0;
@@ -57,7 +57,7 @@ function ict(signal) {
 	var N = signal.length;
 	var cos = calcIctCos(N);
 	var signal_0_5 = 0.5 * signal[0];
-	var coeff = new Array(N);
+	var coeff = new Float64Array(N);
 
 	for (var k = 0; k < N; k++) {
 		var sum = signal_0_5;
@@ -71,11 +71,11 @@ function ict(signal) {
 }
 
 function xct2(signal, width, height, fn) {
-	var coeff = new Array(width * height * 4);
+	var coeff = new Float64Array(width * height * 4);
 
 	for (var row = 0; row < height; row++) {
 		for (var color = 0; color < 4; color++) {
-			var channel = new Array(width);
+			var channel = new Float64Array(width);
 			for (var col = 0; col < width; col++) {
 				channel[col] = signal[(row * width + col) * 4 + color];
 			}
@@ -88,7 +88,7 @@ function xct2(signal, width, height, fn) {
 
 	for (var col = 0; col < width; col++) {
 		for (var color = 0; color < 4; color++) {
-			var channel = new Array(height);
+			var channel = new Float64Array(height);
 			for (var row = 0; row < height; row++) {
 				channel[row] = coeff[(row * width + col) * 4 + color];
 			}
