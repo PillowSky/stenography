@@ -1,6 +1,6 @@
 jimp = require 'jimp'
 async = require 'async'
-dct = require('dct');
+dct = require './dct'
 
 module.exports.suffixWatermarking = (colorFile, watermarkFile, watermarkedFile)->
 	async.parallel
@@ -42,3 +42,14 @@ module.exports.suffixDetection = (watermarkedFile, watermarkFile)->
 			watermarkImage.opaque().write watermarkFile, ->
 				console.log 'Done'
 
+module.exports.dctWatermarking = (colorFile, watermarkFile, watermarkedFile)->
+	jimp.read colorFile, (error, colorImage)->
+		width = colorImage.bitmap.width
+		height = colorImage.bitmap.height
+
+		dcted = dct.dct2(colorImage.bitmap.data, width, height);
+		icted = dct.ict2(dcted, width, height);
+
+		colorImage.bitmap.data = Buffer(icted);
+		colorImage.opaque().write watermarkedFile, ->
+			console.log 'Done'
