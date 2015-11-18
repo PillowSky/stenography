@@ -74,7 +74,7 @@ function xct2(signal, width, height, fn) {
 	var coeff = new Float64Array(width * height * 4);
 
 	for (var row = 0; row < height; row++) {
-		for (var color = 0; color < 4; color++) {
+		for (var color = 0; color < 3; color++) {
 			var channel = new Float64Array(width);
 			for (var col = 0; col < width; col++) {
 				channel[col] = signal[(row * width + col) * 4 + color];
@@ -87,7 +87,7 @@ function xct2(signal, width, height, fn) {
 	}
 
 	for (var col = 0; col < width; col++) {
-		for (var color = 0; color < 4; color++) {
+		for (var color = 0; color < 3; color++) {
 			var channel = new Float64Array(height);
 			for (var row = 0; row < height; row++) {
 				channel[row] = coeff[(row * width + col) * 4 + color];

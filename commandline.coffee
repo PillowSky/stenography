@@ -2,6 +2,7 @@
 
 stenography = require './stenography'
 
-#stenography.suffixWatermarking('landscape.png', 'morning.png', 'watermarked.png')
+#stenography.suffixWatermarking('field.png', 'forest.png', 'watermarked.png')
 #stenography.suffixDetection('watermarked.png', 'watermark.png')
-stenography.dctWatermarking('landscape.png', 'morning.png', 'watermarked.png')
+#stenography.dctWatermarking('field.png', 'forest.png', 'watermarked.png')
+stenography.dctDetection('watermarked.png', 'watermark.png')
