@@ -40,9 +40,6 @@ module.exports.suffixDetect = (watermarkedFile, watermarkFile, suffix)->
 		andNumber = (1 << suffix) - 1
 		watermark = new Uint8ClampedArray(length)
 
-
-		console.log(andNumber, shift)
-
 		for pixel in [0...length] by 4
 			for i in [pixel...pixel+4]
 				watermark[i] = (watermarked[i] & andNumber) << shift
