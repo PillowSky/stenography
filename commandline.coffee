@@ -1,8 +1,8 @@
-"use strict"
+'use strict'
 
 stenography = require './stenography'
 
-#stenography.suffixWatermarking('field.png', 'forest.png', 'watermarked.png')
-#stenography.suffixDetection('watermarked.png', 'watermark.png')
-#stenography.dctWatermarking('field.png', 'forest.png', 'watermarked.png')
-stenography.dctDetection('watermarked.png', 'watermark.png')
+#stenography.suffixWatermark('field.png', 'forest.png', 'watermarked.png', 2)
+#stenography.suffixDetect('watermarked.png', 'watermark.png', 2)
+#stenography.dctWatermark('field.png', 'forest.png', 'watermarked.png', 2, 8)
+stenography.dctDetect('watermarked.png', 'watermark.png', 2, 8)
