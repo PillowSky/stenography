@@ -2,7 +2,8 @@
 	"name": "stenography",
 	"version": "0.0.1",
 	"dependencies": {
-		"bootstrap": "3.x"
+		"bootstrap": "3.x",
+		"seiyria-bootstrap-slider": "5.x"
 	},
 	"ignore": [
 		"**/.*",
