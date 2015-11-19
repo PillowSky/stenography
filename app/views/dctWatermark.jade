@@ -1,17 +1,17 @@
 extends ./layout.jade
 
 block title
-	title Stenography - dctWatermark
+	title Stenography - DctWatermark
 
 block content
 	.jumbotron
-		h2 DCT based watermarking
+		h2 DCT based watermark
 		ul
 			li Encode low frequency signal of watermark image into high frequency portion of color image
-			li <strong>Slice:</strong> The slice of image used to store watermark
-			li <strong>Shift:</strong> Shift factor before encode into color image
-			li <strong>Remember:</strong> You must put right parameters to get the image back
-			li <Strong>Note:</strong> If the image size dis-match, the watermark image will be stretch to match color image
+			li If the image size dismatch, the watermark image will be stretched to match the color image
+			li You must set the following parameters to be same between watermarking and detection
+			li <strong>Slice:</strong> The portion of color image used to carry watermark image
+			li <strong>Shift:</strong> Bits shifted before encode watermark signal into color signal
 
 	.row
 		include ./colorwatermark.jade

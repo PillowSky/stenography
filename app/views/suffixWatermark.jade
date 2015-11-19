@@ -1,17 +1,16 @@
 extends ./layout.jade
 
 block title
-	title Stenography - suffixWatermark
+	title Stenography - SuffixWatermark
 
 block content
 	.jumbotron
-		h2 Suffix based watermarking
+		h2 Suffix based watermark
 		ul
-			li Encode low frequency signal of watermark image into high frequency portion of color image
-			li <strong>Slice:</strong> The slice of image used to store watermark
-			li <strong>Shift:</strong> Shift factor before encode into color image
-			li <strong>Remember:</strong> You must put right parameters to get the image back
-			li <Strong>Note:</strong> If the image size dis-match, the watermark image will be stretch to match color image
+			li Encode most significant bits of watermark image into least significant bits of color image
+			li If the image size dismatch, the watermark image will be stretched to match the color image
+			li You must set the following parameters to be same between watermarking and detection
+			li <strong>Suffix:</strong> The bits encoded
 
 	.row
 		include ./colorwatermark.jade
