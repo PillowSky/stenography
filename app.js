@@ -11,5 +11,5 @@ if (require.main == module) {
 		console.log('Express server listening on port ' + this.address().port);
 	});
 } else {
-	module.exports.app = app;
+	module.exports = app;
 }
