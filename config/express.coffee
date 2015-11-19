@@ -45,7 +45,7 @@ module.exports = (app, config) ->
 	if app.get('env') == 'development'
 		app.use (err, req, res, next) ->
 			res.status err.status || 500
-			res.render 'error',
+			res.render 'error.jade',
 				message: err.message
 				error: err
 				title: 'error'
@@ -54,7 +54,7 @@ module.exports = (app, config) ->
 	# no stacktraces leaked to user
 	app.use (err, req, res, next) ->
 		res.status err.status || 500
-		res.render 'error',
+		res.render 'error.jade',
 			message: err.message
 			error: {}
 			title: 'error'

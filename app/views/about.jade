@@ -1,18 +1,9 @@
-doctype html
-html
-	head
-		meta(charset='UTF-8')
-		meta(http-equiv='X-UA-Compatible' content='IE=edge, chrome=1')
-		meta(name='description' content='Stenography')
-		meta(name='renderer' content='webkit')
-		meta(name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
-		title Stenography - dctDetect
-		link(rel='stylesheet', href='/components/bootstrap/dist/css/bootstrap.min.css')
-		link(rel='icon' href='/img/favicon.ico')
+extends ./layout.jade
 
-	body
+block title
+	title Stenography - dctWatermark
+
+block content
+	.jumbotron
 		h1 About
 
-		script(src='/components/jquery/dist/jquery.min.js')
-		script(src='/components/bootstrap/dist/js/bootstrap.min.js')
-		script(src='/js/script.js')
