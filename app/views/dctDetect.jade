@@ -1,39 +1,43 @@
 extends ./layout.jade
 
 block title
-	title Stenography - dctDetect
+	title Stenography - dctWatermark
 
 block content
 	.jumbotron
-		h1 Hello, world!
-	.container
-		.row
-			.col-sm-6
-				.thumbnail
-					img(src='', alt='...')
-					.caption
-						h3 Thumbnail label
-							p ...
-							p
-								a.btn.btn-primary(href='#', role='button') Button
-								a.btn.btn-default(href='#', role='button') Button
-			.col-sm-6
-				.thumbnail
-					img(src='', alt='...')
-					.caption
-						h3 Thumbnail label
-						p ...
-						p
-							a.btn.btn-primary(href='#', role='button') Button
-							a.btn.btn-default(href='#', role='button') Button
-		.row
-			.col-sm-12
-				.thumbnail
-					img(src='', alt='...')
-					.caption
-						h3 Thumbnail label
-						p ...
-						p
-							a.btn.btn-primary(href='#', role='button') Button
-							a.btn.btn-default(href='#', role='button') Button
+		h2 DCT based detect
+		ul
+			li Detect low frequency signal of watermark image into high frequency portion of color image
+			li <strong>Slice:</strong> The slice of image used to store watermark
+			li <strong>Shift:</strong> Shift factor before encode into color image
+			li <strong>Remember:</strong> You must put right parameters to get the image back
+			li <Strong>Note:</strong> If the image size dis-match, the watermark image will be stretch to match color image
 
+	.row
+		.col-sm-12
+			.thumbnail#watermarked.dropable
+				img.pointer(src='/img/dctWatermarked.png' alt='watermarked image')
+				.caption
+					input.center-block(type='file' name='watermarked')
+					h3.text-center Click to upload your watermakred image
+	.row
+		.col-sm-12
+			.thumbnail.text-center#control
+				p
+					label Slice:
+					span.sliderValue#sliceValue 2
+					input#slice(data-slider-min='1' data-slider-max='8' data-slider-step='1' data-slider-value='2')
+				p
+					label Shift:
+					span.sliderValue#shiftValue 4
+					input#shift(data-slider-min='1' data-slider-max='16' data-slider-step='1' data-slider-value='4')
+
+				button.btn.btn-lg.btn-primary#start(type='button') Start DCT Detect
+
+	.row#result
+		.col-sm-12
+			.thumbnail.text-center
+				img(alt='watermark image')
+				.caption
+					a(target='_blank')
+						button.btn.btn-lg.btn-success(type='button') Download Watermark image

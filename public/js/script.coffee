@@ -5,93 +5,105 @@ $ ->
 	path = '/dctWatermark' if path == '/'
 	$("a[href='#{path}']").parent().addClass('active')
 
-	sliceValue = $('#sliceValue')
-	shiftValue = $('#shiftValue')
-	$('#slice').slider().on 'slide', (slider)->
-		sliceValue.text(slider.value)
-	$('#shift').slider().on 'slide', (slider)->
-		shiftValue.text(slider.value)
+	sliderConfig =
+		'slice':
+			'control': '#slice'
+			'value': '#sliceValue'
+		'shift':
+			'control': '#shift'
+			'value': '#shiftValue'
+		'suffix':
+			'control': '#suffix'
+			'value': '#suffixValue'
 
-	$('#color img').click ->
-		$('#color input').click()
-
-	$('#watermark img').click ->
-		$('#watermark input').click()
-
-	colorFile = null
-	watermarkFile = null
-	previewColor = (file)->
-		colorFile = file
-		reader = new FileReader()
-		reader.onload = (event) ->
-			$('#color img').attr('src', event.target.result)
-		reader.readAsDataURL(file)
-
-	previewWatermark = (file)->
-		watermarkFile = file
-		reader = new FileReader()
-		reader.onload = (event) ->
-			$('#watermark img').attr('src', event.target.result)
-		reader.readAsDataURL(file)
-
-	$('#color input').change ->
-		previewColor(@files[0]) if @files.length
-
-	$('#watermark input').change ->
-		previewWatermark(@files[0]) if @files.length
+	$.each sliderConfig, (name, config)->
+		if $(config.control).length
+			$(config.control).slider().on 'slide', (slider)->
+				$(config.value).text(slider.value)
 
 	$('.dropable').on 'dragenter', (event)->
-		$(this).addClass('dragover')
+		$(this).addClass 'dragover'
 
 	$('.dropable').on 'dragleave', (event)->
-		$(this).removeClass('dragover')
+		$(this).removeClass 'dragover'
 
 	$('.dropable').on 'dragover', (event)->
 		event.preventDefault()
 
-	$('#color').on 'drop', (event)->
-		event.preventDefault()
-		$(this).removeClass('dragover')
-		files = event.originalEvent.dataTransfer.files
-		previewColor(files[0]) if files.length
+	previewConfig =
+		'color':
+			'selector': '#color'
+			'img': '#color img'
+			'input': '#color input'
+		'watermark':
+			'selector': '#watermark'
+			'img': '#watermark img'
+			'input': '#watermark input'
+		'watermarked':
+			'selector': '#watermarked'
+			'img': '#watermarked img'
+			'input': '#watermarked input'
 
-	$('#watermark').on 'drop', (event)->
-		event.preventDefault()
-		$(this).removeClass('dragover')
-		files = event.originalEvent.dataTransfer.files
-		previewWatermark(files[0]) if files.length
+	preview = (file, name)->
+		previewConfig[name].file = file
+		reader = new FileReader()
+		reader.onload = (event)->
+			$(previewConfig[name].img).attr('src', event.target.result)
+		reader.readAsDataURL(file)
+
+	$.each previewConfig, (name, config)->
+		if $(config.selector).length
+			$(config.img).click ->
+				$(config.input).click()
+
+			$(config.input).change ->
+				preview(@files[0], name) if @files.length
+
+			$(config.selector).on 'drop', (event)->
+				event.preventDefault()
+				$(this).removeClass('dragover')
+				files = event.originalEvent.dataTransfer.files
+				preview(files[0], name) if files.length
 
 	$('#start').on 'click', (event)->
 		button = $(this)
-		elapsed = 0
-		button.prop('disabled', true).text('Running')
+		buttonText = button.text()
+		button.prop('disabled', true).text('Running 0s')
+		$('#result').slideUp()
 
+		elapsed = 0
 		handle = setInterval ->
 			elapsed++
 			button.text("Running #{elapsed}s")
 		, 1000
 
 		form = new FormData()
-		form.append('slice', $('#slice').slider('getValue'))
-		form.append('shift', $('#shift').slider('getValue'))
-		form.append('color', colorFile)
-		form.append('watermark', watermarkFile)
+		$.each sliderConfig, (name, config)->
+			if $(config.control).length
+				form.append(name, $(config.control).slider('getValue'))
+
+		$.each previewConfig, (name, config)->
+			if $(config.selector).length
+				form.append(name, config.file)
 
 		xhr = new XMLHttpRequest()
-		xhr.open('post', '/dctWatermark/run')
+		xhr.open('post', "#{path}/run")
 
-		xhr.onload = ->
+		xhr.onload = (event)->
 			clearInterval(handle)
-			location = JSON.parse(this.responseText).location
+			console.log(this, event)
+
+			location = JSON.parse(@responseText).location
 			$('#result img').attr('src', location)
 			$('#result a').attr('href', location)
 			$('#result').slideDown()
-			button.prop('disabled', false).text('Start DCT Watermarking')
+			button.prop('disabled', false).text(buttonText)
 
 		xhr.onerror = (event)->
 			clearInterval(handle)
-			console.error(event)
+			console.error(this, event)
+
 			alert("Error: #{JSON.stringify(event)}")
-			button.prop('disabled', false).text('Start DCT Watermarking')
+			button.prop('disabled', false).text(buttonText)
 
 		xhr.send(form)
