@@ -63,9 +63,11 @@ module.exports.dctWatermark = (colorFile, watermarkFile, watermarkedFile, slice,
 		watermarkDct = dct.dct2(results.watermark.bitmap.data, width, height)
 
 		zigzag width, height, width * height / slice, (inRow, inCol, reRow, reCol)->
-			colorDct[(reRow * width + reCol) * 4] = watermarkDct[(inRow * width + inCol) * 4] >> shift
-			colorDct[(reRow * width + reCol) * 4 + 1] = watermarkDct[(inRow * width + inCol) * 4 + 1] >> shift
-			colorDct[(reRow * width + reCol) * 4 + 2] = watermarkDct[(inRow * width + inCol) * 4 + 2] >> shift
+			inIndex = (inRow * width + inCol) * 4
+			reIndex = (reRow * width + reCol) * 4
+			colorDct[reIndex++] = watermarkDct[inIndex++] >> shift
+			colorDct[reIndex++] = watermarkDct[inIndex++] >> shift
+			colorDct[reIndex] = watermarkDct[inIndex] >> shift
 
 		watermarkedIct = dct.ict2(colorDct, width, height)
 
@@ -73,7 +75,6 @@ module.exports.dctWatermark = (colorFile, watermarkFile, watermarkedFile, slice,
 			watermarkedImage.bitmap.data = new Uint8ClampedArray(watermarkedIct)
 			watermarkedImage.opaque().quality(100).write watermarkedFile, ->
 				console.log 'Done'
-
 
 module.exports.dctDetect = (watermarkedFile, watermarkFile, slice, shift)->
 	jimp.read watermarkedFile, (error, watermarkedImage)->
@@ -84,9 +85,11 @@ module.exports.dctDetect = (watermarkedFile, watermarkFile, slice, shift)->
 		watermarkDct = new Float64Array(width * height * 4)
 
 		zigzag width, height, width * height / slice, (inRow, inCol, reRow, reCol)->
-			watermarkDct[(inRow * width + inCol) * 4] = watermarkedDct[(reRow * width + reCol) * 4] << shift
-			watermarkDct[(inRow * width + inCol) * 4 + 1] = watermarkedDct[(reRow * width + reCol) * 4 + 1] << shift
-			watermarkDct[(inRow * width + inCol) * 4 + 2] = watermarkedDct[(reRow * width + reCol) * 4 + 2] << shift
+			inIndex = (inRow * width + inCol) * 4
+			reIndex = (reRow * width + reCol) * 4
+			watermarkDct[inIndex++] = watermarkedDct[reIndex++] << shift
+			watermarkDct[inIndex++] = watermarkedDct[reIndex++] << shift
+			watermarkDct[inIndex] = watermarkedDct[reIndex] << shift
 
 		watermarkIct = dct.ict2(watermarkDct, width, height)
 
