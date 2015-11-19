@@ -14,26 +14,12 @@ block content
 			li <Strong>Note:</strong> If the image size dis-match, the watermark image will be stretch to match color image
 
 	.row
-		.col-sm-12
-			.thumbnail#watermarked.dropable
-				img.pointer(src='/img/suffixWatermarked.png' alt='watermarked image')
-				.caption
-					input.center-block(type='file' name='watermarked')
-					h3.text-center Click to upload your watermakred image
+		include ./watermarked.jade
+		+watermarked('/img/suffixWatermarked.png')
 	.row
-		.col-sm-12
-			.thumbnail.text-center#control
-				p
-					label Suffix:
-					span.sliderValue#suffixValue 2
-					input#suffix(data-slider-min='1' data-slider-max='8' data-slider-step='1' data-slider-value='2')
-
-				button.btn.btn-lg.btn-primary#start(type='button') Start Suffix Detect
+		include ./sliceshift.jade
+		+sliceshift('Run Suffix Detect')
 
 	.row#result
-		.col-sm-12
-			.thumbnail.text-center
-				img(alt='watermark image')
-				.caption
-					a(target='_blank')
-						button.btn.btn-lg.btn-success(type='button') Download Watermark image
+		include ./result.jade
+		+result('watermark image', 'Download watermark image')

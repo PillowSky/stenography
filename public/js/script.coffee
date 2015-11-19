@@ -65,16 +65,15 @@ $ ->
 				files = event.originalEvent.dataTransfer.files
 				preview(files[0], name) if files.length
 
-	$('#start').on 'click', (event)->
+	$('#run').on 'click', (event)->
 		button = $(this)
 		buttonText = button.text()
-		button.prop('disabled', true).text('Running 0s')
+		button.attr('disabled', true).text('Running 0s')
 		$('#result').slideUp()
 
 		elapsed = 0
 		handle = setInterval ->
-			elapsed++
-			button.text("Running #{elapsed}s")
+			button.text("Running #{++elapsed}s")
 		, 1000
 
 		form = new FormData()
@@ -97,13 +96,13 @@ $ ->
 			$('#result img').attr('src', location)
 			$('#result a').attr('href', location)
 			$('#result').slideDown()
-			button.prop('disabled', false).text(buttonText)
+			button.removeAttr('disabled').text(buttonText)
 
 		xhr.onerror = (event)->
 			clearInterval(handle)
 			console.error(this, event)
 
 			alert("Error: #{JSON.stringify(event)}")
-			button.prop('disabled', false).text(buttonText)
+			button.removeAttr('disabled').text(buttonText)
 
 		xhr.send(form)

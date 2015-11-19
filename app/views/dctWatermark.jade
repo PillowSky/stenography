@@ -14,36 +14,12 @@ block content
 			li <Strong>Note:</strong> If the image size dis-match, the watermark image will be stretch to match color image
 
 	.row
-		.col-sm-6
-			.thumbnail#color.dropable
-				img.pointer(src='/img/color.png' alt='color image')
-				.caption
-					input.center-block(type='file' name='color')
-					h3.text-center Click to upload your color image
-		.col-sm-6
-			.thumbnail#watermark.dropable
-				img.pointer(src='/img/watermark.png', alt='watermark image')
-				.caption
-					input.center-block(type='file' name='watermark')
-					h3.text-center Click to upload your watermark image
+		include ./colorwatermark.jade
+		+colorwatermark
 	.row
-		.col-sm-12
-			.thumbnail.text-center#control
-				p
-					label Slice:
-					span.sliderValue#sliceValue 2
-					input#slice(data-slider-min='1' data-slider-max='8' data-slider-step='1' data-slider-value='2')
-				p
-					label Shift:
-					span.sliderValue#shiftValue 4
-					input#shift(data-slider-min='1' data-slider-max='16' data-slider-step='1' data-slider-value='4')
-
-				button.btn.btn-lg.btn-primary#start(type='button') Start DCT Watermarking
+		include ./sliceshift.jade
+		+sliceshift('Run DCT Watermark')
 
 	.row#result
-		.col-sm-12
-			.thumbnail.text-center
-				img(alt='watermarked image')
-				.caption
-					a(target='_blank')
-						button.btn.btn-lg.btn-success(type='button') Download Watermarked image
+		include ./result.jade
+		+result('watermarked image', 'Download watermarked image')

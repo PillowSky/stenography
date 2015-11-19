@@ -1,0 +1,13 @@
+mixin colorwatermark
+	.col-sm-6
+		.thumbnail#color.dropable
+			img.pointer(src='/img/color.png' alt='color image')
+			.caption
+				input.center-block(type='file' name='color')
+				h3.text-center Click to upload your color image
+	.col-sm-6
+		.thumbnail#watermark.dropable
+			img.pointer(src='/img/watermark.png', alt='watermark image')
+			.caption
+				input.center-block(type='file' name='watermark')
+				h3.text-center Click to upload your watermark image

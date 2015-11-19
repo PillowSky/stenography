@@ -12,7 +12,6 @@ module.exports = (grunt) ->
 		'app/views/dctDetect.html': 'app/views/dctDetect.jade'
 		'app/views/suffixWatermark.html': 'app/views/suffixWatermark.jade'
 		'app/views/suffixDetect.html': 'app/views/suffixDetect.jade'
-		'app/views/about.html': 'app/views/about.jade'
 
 	lessFiles =
 		'public/css/style.css': 'public/css/style.less'

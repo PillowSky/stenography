@@ -1,0 +1,7 @@
+mixin result(imgAlt, btnText)
+	.col-sm-12
+		.thumbnail.text-center
+			img(alt=imgAlt)
+			.caption
+				a(target='_blank')
+					button.btn.btn-lg.btn-success(type='button')= btnText

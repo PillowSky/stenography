@@ -1,0 +1,13 @@
+mixin sliceshift(runText)
+	.col-sm-12
+		.thumbnail.text-center#control
+			p
+				label Slice:
+				span.sliderValue#sliceValue 2
+				input#slice(data-slider-min='1' data-slider-max='10' data-slider-step='1' data-slider-value='2')
+			p
+				label Shift:
+				span.sliderValue#shiftValue 4
+				input#shift(data-slider-min='0' data-slider-max='16' data-slider-step='1' data-slider-value='4')
+
+			button.btn.btn-lg.btn-primary#run(type='button')= runText

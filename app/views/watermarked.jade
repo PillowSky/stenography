@@ -1,0 +1,7 @@
+mixin watermarked(watermarkedFile)
+	.col-sm-12
+		.thumbnail#watermarked.dropable
+			img.pointer(src=watermarkedFile alt='watermarked image')
+			.caption
+				input.center-block(type='file' name='watermarked')
+				h3.text-center Click to upload your watermakred image
