@@ -1,22 +1,29 @@
-express  = require 'express'
-multipart = require('connect-multiparty')()
-tmp = require('tmp')
+multipart = require 'connect-multiparty'
+tmp = require 'tmp'
 stenography = require '../models/stenography'
-
-router = express.Router()
-
-router.get '/', (req, res) ->
-	res.render 'dctWatermark'
-
-router.post '/start', multipart, (req, res)->
-	tmp.tmpName {template: '/tmp/tmp-XXXXXX.png'}, (error, tmpName)->
-		throw error if error
-
-		colorFile = req.files.color.path || 'public/img/color.png'
-		watermarkFile = req.files.color.path || 'public/img/watermark.png'
-		stenography.dctWatermark colorFile, watermarkFile, tmpName, req.body.slice, req.body.shift, ->
-			res.json {location: tmpName}
+fs = require 'fs'
 
 module.exports = (app) ->
-	app.use '/', router
-	app.use '/dctWatermark', router
+	app.get '/', (req, res) ->
+		res.render 'dctWatermark'
+
+	app.get '/dctWatermark', (req, res) ->
+		res.render 'dctWatermark'
+
+	app.post '/dctWatermark/run', multipart(), (req, res)->
+		tmp.tmpName {template: '/tmp/tmp-XXXXXX.png'}, (_, tmpName)->
+			colorFile = if req.files.color then req.files.color.path else 'public/img/color.png'
+			watermarkFile = if req.files.watermark then req.files.watermark.path else 'public/img/watermark.png'
+
+			stenography.dctWatermark colorFile, watermarkFile, tmpName, req.body.slice, req.body.shift, ->
+				res.json {location: tmpName}
+
+				fs.unlink(file.path) for file in req.files
+				setTimeout ->
+					fs.unlink tmpName, (ex)->
+						console.error(ex) if ex
+				, 1800000
+			, (error)->
+				res.status(500)
+				res.json(error)
+				fs.unlink(file.path) for file in req.files

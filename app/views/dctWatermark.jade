@@ -28,7 +28,7 @@ block content
 					h3.text-center Click to upload your watermark image
 	.row
 		.col-sm-12
-			.thumbnail.text-center
+			.thumbnail.text-center#control
 				p
 					label Slice:
 					span.sliderValue#sliceValue 2
@@ -43,6 +43,7 @@ block content
 	.row#result
 		.col-sm-12
 			.thumbnail.text-center
-				img(src='', alt='watermarked image')
+				img(alt='watermarked image')
 				.caption
-					button.btn.btn-lg.btn-primary(type='button') Download Watermarked image
+					a(target='_blank')
+						button.btn.btn-lg.btn-success(type='button') Download Watermarked image

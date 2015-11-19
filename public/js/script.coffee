@@ -62,15 +62,36 @@ $ ->
 		previewWatermark(files[0]) if files.length
 
 	$('#start').on 'click', (event)->
+		button = $(this)
+		elapsed = 0
+		button.prop('disabled', true).text('Running')
+
+		handle = setInterval ->
+			elapsed++
+			button.text("Running #{elapsed}s")
+		, 1000
+
 		form = new FormData()
 		form.append('slice', $('#slice').slider('getValue'))
 		form.append('shift', $('#shift').slider('getValue'))
 		form.append('color', colorFile)
 		form.append('watermark', watermarkFile)
+
 		xhr = new XMLHttpRequest()
-		xhr.open('post', '/dctWatermark/start')
+		xhr.open('post', '/dctWatermark/run')
+
 		xhr.onload = ->
-			console.log 'onload'
-		xhr.onerror = ->
-			console.log 'onerror'
+			clearInterval(handle)
+			location = JSON.parse(this.responseText).location
+			$('#result img').attr('src', location)
+			$('#result a').attr('href', location)
+			$('#result').slideDown()
+			button.prop('disabled', false).text('Start DCT Watermarking')
+
+		xhr.onerror = (event)->
+			clearInterval(handle)
+			console.error(event)
+			alert("Error: #{JSON.stringify(event)}")
+			button.prop('disabled', false).text('Start DCT Watermarking')
+
 		xhr.send(form)
