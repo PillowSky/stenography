@@ -6,7 +6,6 @@ logger = require 'morgan'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
 compress = require 'compression'
-methodOverride = require 'method-override'
 ehp = require 'ehp'
 
 module.exports = (app, config) ->
@@ -25,11 +24,10 @@ module.exports = (app, config) ->
 	app.use cookieParser()
 	app.use compress()
 	app.use express.static config.root + '/public'
-	app.use methodOverride()
 
 	controllers = glob.sync config.root + '/app/controllers/**/*.coffee'
 	controllers.forEach (controller) ->
-		require(controller)(app);
+		require(controller)(app)
 
 	# catch 404 and forward to error handler
 	app.use (req, res, next) ->

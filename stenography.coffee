@@ -5,7 +5,7 @@ async = require 'async'
 dct = require './dct'
 zigzag = require './zigzag'
 
-module.exports.suffixWatermark = (colorFile, watermarkFile, watermarkedFile, suffix)->
+module.exports.suffixWatermark = (colorFile, watermarkFile, watermarkedFile, suffix, done)->
 	async.parallel
 		color: (callback)->
 			jimp.read(colorFile, callback)
@@ -27,10 +27,9 @@ module.exports.suffixWatermark = (colorFile, watermarkFile, watermarkedFile, suf
 
 		new jimp width, height, (error, watermarkedImage)->
 			watermarkedImage.bitmap.data = watermarked
-			watermarkedImage.opaque().quality(100).write watermarkedFile, ->
-				console.log 'Done'
+			watermarkedImage.opaque().quality(100).write watermarkedFile, done
 
-module.exports.suffixDetect = (watermarkedFile, watermarkFile, suffix)->
+module.exports.suffixDetect = (watermarkedFile, watermarkFile, suffix, done)->
 	jimp.read watermarkedFile, (error, watermarkedImage)->
 		width = watermarkedImage.bitmap.width
 		height = watermarkedImage.bitmap.height
@@ -46,10 +45,9 @@ module.exports.suffixDetect = (watermarkedFile, watermarkFile, suffix)->
 
 		new jimp width, height, (error, watermarkImage)->
 			watermarkImage.bitmap.data = watermark
-			watermarkImage.opaque().quality(100).write watermarkFile, ->
-				console.log 'Done'
+			watermarkImage.opaque().quality(100).write watermarkFile, done
 
-module.exports.dctWatermark = (colorFile, watermarkFile, watermarkedFile, slice, shift)->
+module.exports.dctWatermark = (colorFile, watermarkFile, watermarkedFile, slice, shift, done)->
 	async.parallel
 		color: (callback)->
 			jimp.read(colorFile, callback)
@@ -73,10 +71,9 @@ module.exports.dctWatermark = (colorFile, watermarkFile, watermarkedFile, slice,
 
 		new jimp width, height, (error, watermarkedImage)->
 			watermarkedImage.bitmap.data = new Uint8ClampedArray(watermarkedIct)
-			watermarkedImage.opaque().quality(100).write watermarkedFile, ->
-				console.log 'Done'
+			watermarkedImage.opaque().quality(100).write watermarkedFile, done
 
-module.exports.dctDetect = (watermarkedFile, watermarkFile, slice, shift)->
+module.exports.dctDetect = (watermarkedFile, watermarkFile, slice, shift, done)->
 	jimp.read watermarkedFile, (error, watermarkedImage)->
 		width = watermarkedImage.bitmap.width
 		height = watermarkedImage.bitmap.height
@@ -95,5 +92,4 @@ module.exports.dctDetect = (watermarkedFile, watermarkFile, slice, shift)->
 
 		new jimp width, height, (error, watermarkImage)->
 			watermarkImage.bitmap.data = new Uint8ClampedArray(watermarkIct)
-			watermarkImage.opaque().quality(100).write watermarkFile, ->
-				console.log 'Done'
+			watermarkImage.opaque().quality(100).write watermarkFile, done

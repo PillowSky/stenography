@@ -13,11 +13,12 @@
 		"cookie-parser": "1.x",
 		"body-parser": "1.x",
 		"compression": "1.x",
-		"method-override": "2.x",
-		"ehp": "1.x",
 		"glob": "5.x",
+		"ehp": "1.x",
+		"connect-multiparty": "2.x",
 		"jimp": "x",
-		"async": "1.x"
+		"async": "1.x",
+		"tmp": "x"
 	},
 	"devDependencies": {
 		"grunt": "x",
