@@ -25,7 +25,7 @@ module.exports.suffixWatermark = (colorFile, watermarkFile, watermarkedFile, suf
 
 		for pixel in [0...length] by 4
 			for i in [pixel...pixel+4]
-				watermarked[i] = (color[i] & andNumber) | watermark[i] >> shift
+				watermarked[i] = (color[i] & andNumber) | watermark[i] >>> shift
 
 		new jimp width, height, (error, watermarkedImage)->
 			watermarkedImage.bitmap.data = watermarked
