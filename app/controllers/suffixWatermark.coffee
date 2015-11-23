@@ -15,7 +15,7 @@ module.exports = (app) ->
 			stenography.suffixWatermark colorFile, watermarkFile, tmpName, req.body.suffix, ->
 				res.json {location: tmpName}
 
-				fs.unlink(file.path) for file in req.files
+				cleanup()
 				setTimeout ->
 					fs.unlink tmpName, (ex)->
 						console.error(ex) if ex
@@ -23,4 +23,8 @@ module.exports = (app) ->
 			, (error)->
 				res.status(500)
 				res.json(error)
-				fs.unlink(file.path) for file in req.files
+				cleanup()
+
+		cleanup = ->
+			for name, file of req.files
+				fs.unlink(file.path)
