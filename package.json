@@ -9,6 +9,7 @@
 	"dependencies": {
 		"coffee-script": "1.x",
 		"jade": "1.x",
+		"less": "2.x",
 		"express": "4.x",
 		"serve-favicon": "2.x",
 		"morgan": "^1.x",
