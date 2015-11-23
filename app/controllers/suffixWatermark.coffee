@@ -9,8 +9,8 @@ module.exports = (app) ->
 
 	app.post '/suffixWatermark/run', multipart(), (req, res)->
 		tmp.tmpName {template: '/tmp/tmp-XXXXXX.png'}, (_, tmpName)->
-			colorFile = if req.files.color then req.files.color.path else 'public/img/color.png'
-			watermarkFile = if req.files.watermark then req.files.watermark.path else 'public/img/watermark.png'
+			colorFile = if req.files.color then req.files.color.path else __dirname + '/../../public/img/color.png'
+			watermarkFile = if req.files.watermark then req.files.watermark.path else __dirname + '/../../public/img/watermark.png'
 
 			stenography.suffixWatermark colorFile, watermarkFile, tmpName, req.body.suffix, ->
 				res.json {location: tmpName}

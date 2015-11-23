@@ -9,7 +9,7 @@ module.exports = (app) ->
 
 	app.post '/dctDetect/run', multipart(), (req, res)->
 		tmp.tmpName {template: '/tmp/tmp-XXXXXX.png'}, (_, tmpName)->
-			watermakedFile = if req.files.watermarked then req.files.watermarked.path else 'public/img/dctWatermarked.png'
+			watermakedFile = if req.files.watermarked then req.files.watermarked.path else __dirname + '/../../public/img/dctWatermarked.png'
 
 			stenography.dctDetect watermakedFile, tmpName, req.body.slice, req.body.shift, ->
 				res.json {location: tmpName}
